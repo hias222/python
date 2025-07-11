@@ -26,3 +26,11 @@ Thumbs.db
 
 # Environment variables
 .env
+
+# IDE and miscellaneous
+.idea/
+*.swp
+*.swo
+
+# Generated GUIDs
+*.guid

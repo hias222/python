@@ -18,7 +18,7 @@ def create_user():
     if not username or not email:
         return jsonify({'error': 'Username and email required'}), 400
     user = user_repo.add_user(username, email)
-    return jsonify({'id': user.id, 'username': user.username, 'email': user.email}), 201
+    return jsonify({'id': user.id, 'username': user.username, 'email': user.email, 'guid': user.guid}), 201
 
 if __name__ == '__main__':
     app.run(debug=True)
