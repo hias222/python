@@ -27,5 +27,19 @@ def create_user():
         'updated_at': user.updated_at.isoformat()
     }), 201
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = user_repo.get_all_users()
+    return jsonify([
+        {
+            'id': u.id,
+            'username': u.username,
+            'email': u.email,
+            'guid': u.guid,
+            'created_at': u.created_at.isoformat(),
+            'updated_at': u.updated_at.isoformat()
+        } for u in users
+    ])
+
 if __name__ == '__main__':
     app.run(debug=True)
