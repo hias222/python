@@ -41,5 +41,19 @@ def get_users():
         } for u in users
     ])
 
+@app.route('/users/<username>', methods=['GET'])
+def get_user_by_name(username):
+    user = user_repo.get_user_by_username(username)
+    if user:
+        return jsonify({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'guid': user.guid,
+            'created_at': user.created_at.isoformat(),
+            'updated_at': user.updated_at.isoformat()
+        })
+    return jsonify({'error': 'User not found'}), 404
+
 if __name__ == '__main__':
     app.run(debug=True)
