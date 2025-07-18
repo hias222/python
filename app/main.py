@@ -55,5 +55,12 @@ def get_user_by_name(username):
         })
     return jsonify({'error': 'User not found'}), 404
 
+@app.route('/users/<username>', methods=['DELETE'])
+def delete_user_by_name(username):
+    success = user_repo.delete_user_by_username(username)
+    if success:
+        return jsonify({'message': f'User {username} deleted.'})
+    return jsonify({'error': 'User not found'}), 404
+
 if __name__ == '__main__':
     app.run(debug=True)

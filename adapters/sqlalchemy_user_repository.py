@@ -29,6 +29,14 @@ class UserRepository:
     def get_all_users(self):
         users = UserModel.query.all()
         return [User(u.id, u.username, u.email, u.guid, u.created_at, u.updated_at) for u in users]
+    
+    def delete_user_by_username(self, username):
+        user = UserModel.query.filter_by(username=username).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return True
+        return False
 
     def get_user_by_username(self, username):
         user = UserModel.query.filter_by(username=username).first()
