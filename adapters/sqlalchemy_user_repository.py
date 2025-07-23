@@ -18,17 +18,17 @@ class UserRepository:
         user = UserModel(username=username, email=email)
         db.session.add(user)
         db.session.commit()
-        return User(user.id, user.username, user.email, user.guid, user.created_at, user.updated_at)
+        return self._to_domain_user(user)
 
     def get_user(self, user_id):
         user = UserModel.query.get(user_id)
         if user:
-            return User(user.id, user.username, user.email, user.guid, user.created_at, user.updated_at)
+            return self._to_domain_user(user)
         return None
 
     def get_all_users(self):
         users = UserModel.query.all()
-        return [User(u.id, u.username, u.email, u.guid, u.created_at, u.updated_at) for u in users]
+        return [self._to_domain_user(u) for u in users]
     
     def delete_user_by_username(self, username):
         user = UserModel.query.filter_by(username=username).first()
@@ -41,5 +41,15 @@ class UserRepository:
     def get_user_by_username(self, username):
         user = UserModel.query.filter_by(username=username).first()
         if user:
-            return User(user.id, user.username, user.email, user.guid, user.created_at, user.updated_at)
+            return self._to_domain_user(user)
         return None
+    
+    def _to_domain_user(self, user_model):
+        return User(
+            user_model.id,
+            user_model.username,
+            user_model.email,
+            user_model.guid,
+            user_model.created_at,
+            user_model.updated_at
+        )
