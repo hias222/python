@@ -27,8 +27,15 @@ class UserRepository:
         return None
 
     def get_all_users(self):
-        users = UserModel.query.all()
-        return [self._to_domain_user(u) for u in users]
+        users = db.session.query(
+            UserModel.id,
+            UserModel.username,
+            UserModel.email,
+            UserModel.guid,
+            UserModel.created_at,
+            UserModel.updated_at
+        ).all()
+        return [User(*u) for u in users]
     
     def delete_user_by_username(self, username):
         user = UserModel.query.filter_by(username=username).first()
