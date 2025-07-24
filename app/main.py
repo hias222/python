@@ -62,5 +62,21 @@ def delete_user_by_name(username):
         return jsonify({'message': f'User {username} deleted.'})
     return jsonify({'error': 'User not found'}), 404
 
+@app.route('/users/search', methods=['GET'])
+def search_users():
+    # You can now search users with a GET request to /users/search?q=part_of_name.
+    username_part = request.args.get('q', '')
+    users = user_repo.get_users_by_username_part(username_part)
+    return jsonify([
+        {
+            'id': u.id,
+            'username': u.username,
+            'email': u.email,
+            'guid': u.guid,
+            'created_at': u.created_at.isoformat(),
+            'updated_at': u.updated_at.isoformat()
+        } for u in users
+    ])
+
 if __name__ == '__main__':
     app.run(debug=True)

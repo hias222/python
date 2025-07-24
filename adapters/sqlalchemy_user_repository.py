@@ -51,6 +51,10 @@ class UserRepository:
             return self._to_domain_user(user)
         return None
     
+    def get_users_by_username_part(self, username_part):
+        users = UserModel.query.filter(UserModel.username.like(f"%{username_part}%")).all()
+        return [self._to_domain_user(u) for u in users]
+    
     def _to_domain_user(self, user_model):
         return User(
             user_model.id,
