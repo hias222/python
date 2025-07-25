@@ -58,6 +58,14 @@ class UserRepository:
         users = UserModel.query.filter(UserModel.username.like(f"%{username_part}%")).all()
         return [self._to_domain_user(u) for u in users]
     
+    def update_username(self, user_id, new_username):
+        user = UserModel.query.get(user_id)
+        if user:
+            user.username = new_username
+            db.session.commit()
+            return self._to_domain_user(user)
+        return None
+
     def _to_domain_user(self, user_model):
         return User(
             user_model.id,
