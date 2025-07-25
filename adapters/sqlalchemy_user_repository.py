@@ -14,6 +14,9 @@ class UserModel(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.datetime.utcnow(), onupdate=lambda: datetime.datetime.utcnow())
 
 class UserRepository:
+    def __init__(self, app=None):
+        self.testing = app.config['TESTING'] if app else False
+
     def add_user(self, username, email):
         user = UserModel(username=username, email=email)
         db.session.add(user)
