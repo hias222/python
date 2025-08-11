@@ -78,5 +78,32 @@ def search_users():
         } for u in users
     ])
 
+@app.route('/users/<username>', methods=['PUT'])
+def update_user(username):
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No input data provided'}), 400
+
+    user = user_repo.get_user_by_username(username)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Update fields if present in request
+    if 'username' in data:
+        user.username = data['username']
+    if 'email' in data:
+        user.email = data['email']
+
+    db.session.commit()
+
+    return jsonify({
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+        'guid': user.guid,
+        'created_at': user.created_at.isoformat(),
+        'updated_at': user.updated_at.isoformat()
+    })
+
 if __name__ == '__main__':
     app.run(debug=True)
